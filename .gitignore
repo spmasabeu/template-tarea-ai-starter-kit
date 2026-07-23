@@ -1,0 +1,25 @@
+temp
+pruebas-locales
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Rails/runtime
+/log/*
+!/log/.keep
+/tmp/*
+!/tmp/.keep
+/storage/*
+!/storage/.keep
+
+# Dependencies and caches
+/.bundle
+/vendor/bundle
+/node_modules
+/.cache
+
+# OS/editor noise
+.DS_Store
+*.swp
