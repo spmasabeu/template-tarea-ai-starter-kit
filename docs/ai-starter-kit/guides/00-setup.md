@@ -39,6 +39,22 @@ wsl --install
 
 Luego abre Ubuntu y continúa con los pasos de Linux.
 
+### Base de datos local
+
+Para preparar la app sin borrar datos locales:
+
+```bash
+bin/rails db:prepare
+```
+
+Si necesitas volver a un estado limpio:
+
+```bash
+bin/rails db:reset
+```
+
+`db:reset` borra la base de datos del ambiente actual, la crea de nuevo, carga el esquema y ejecuta `db/seeds.rb`. Úsalo solo para desarrollo o test; no para producción.
+
 ## 4. Instalar herramientas
 
 Instala solo las que vayas a probar.

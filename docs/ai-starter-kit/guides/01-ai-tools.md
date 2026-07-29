@@ -136,14 +136,14 @@ Empieza con el modelo recomendado por la herramienta. Sube a un modelo más capa
 
 Regla práctica:
 
-| Caso | OpenAI/Codex | Claude | Uso esperado |
-| --- | --- | --- | --- |
-| Pregunta corta o cambio trivial | modelo económico, esfuerzo bajo | Haiku | Respuestas rápidas, bajo costo |
-| Trabajo diario de código | GPT-5.6 Terra o similar, esfuerzo medio | Sonnet | Buen balance costo/calidad |
-| Problema difícil o refactor grande | GPT-5.6 Sol, esfuerzo alto | Opus | Más razonamiento, más tokens |
-| Mucho contexto | variante con contexto largo si existe | Sonnet/Opus 1M | Leer repos, trazas o docs extensos |
+| Caso | Tipo de modelo | Uso esperado |
+| --- | --- | --- |
+| Pregunta corta o cambio trivial | Económico, esfuerzo bajo | Respuestas rápidas, bajo costo |
+| Trabajo diario de código | Balanceado, esfuerzo medio | Buen equilibrio entre calidad, velocidad y costo |
+| Problema difícil o refactor grande | Avanzado, esfuerzo alto | Más razonamiento para decisiones complejas |
+| Mucho contexto | Contexto largo | Leer repos, trazas o documentos extensos |
 
-No elijas por nombre solamente. El costo real depende de tokens de entrada, tokens de salida, contexto cargado y esfuerzo de razonamiento. Para una tarea chica, un modelo robusto puede ser desperdicio; para una tarea ambigua o de arquitectura, un modelo barato puede salir caro si falla y hay que repetir.
+No elijas por nombre solamente: revisa la documentación actual de la herramienta y elige según dificultad, contexto y costo. Para una tarea chica, un modelo robusto puede ser desperdicio; para una tarea ambigua o de arquitectura, un modelo barato puede salir caro si falla y hay que repetir.
 
 ## Prompt de uso responsable
 

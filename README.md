@@ -1,24 +1,37 @@
-# README
+# Template Tarea AI Starter Kit
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Starter kit Rails para trabajar tareas del curso con apoyo de IA, PRs revisables, CI en GitHub Actions y deploy en Render.
 
-Things you may want to cover:
+## Por donde partir
 
-* Ruby version
+Lee las guías en orden:
 
-* System dependencies
+1. [00 - Setup](docs/ai-starter-kit/guides/00-setup.md)
+2. [01 - AI Tools](docs/ai-starter-kit/guides/01-ai-tools.md)
+3. [02 - Spec Workflow](docs/ai-starter-kit/guides/02-spec-workflow.md)
+4. [03 - Git y Pull Requests](docs/ai-starter-kit/guides/03-git-pull-requests.md)
+5. [04 - CI/CD y Render](docs/ai-starter-kit/guides/04-ci-cd-render.md)
 
-* Configuration
+Índice corto: [docs/ai-starter-kit](docs/ai-starter-kit/README.md).
 
-* Database creation
+## Comandos base
 
-* Database initialization
+```bash
+bin/setup
+bin/rails server
+bin/rails test
+bin/ci
+```
 
-* How to run the test suite
+`bin/ci` corre el mismo chequeo que usa GitHub Actions: setup, tests, RuboCop y Brakeman.
 
-* Services (job queues, cache servers, search engines, etc.)
+## Flujo esperado
 
-* Deployment instructions
+1. Trabaja en una rama corta desde `main`.
+2. Usa IA con contexto del repo y cambios pequeños.
+3. Abre PR hacia `main`.
+4. Espera CI verde y revisión.
+5. Mergea a `main`.
+6. Render despliega desde `main`.
 
-* ...
+No guardes tokens, API keys ni credenciales en Git.
