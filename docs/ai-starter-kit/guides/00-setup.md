@@ -1,33 +1,49 @@
 # 00 - Setup
 
-Objetivo: dejar el repositorio, GitHub Copilot Student y OpenCode listos para una primera tarea asistida por IA.
+Objetivo: dejar el repositorio y al menos una herramienta de IA en terminal lista para una primera tarea asistida.
 
-Estado de referencia: verificado el 22 de julio de 2026 contra documentacion publica de GitHub y OpenCode.
+Estado de referencia: verificado el 28 de julio de 2026 contra documentación pública de GitHub, OpenCode, OpenAI, Anthropic y NVIDIA.
 
-## 1. Preparar GitHub Student
+## 1. Preparar cuentas
 
-1. Entra a <https://github.com/settings/education/benefits>.
-2. Si GitHub aun no reconoce tu cuenta como estudiante, inicia la postulacion.
-3. Activa GitHub Copilot Student desde los beneficios educacionales.
-4. Revisa tu plan en la configuracion de Copilot.
+Mínimo recomendado:
 
-GitHub indica que estudiantes verificados acceden sin costo a Copilot Student y que la elegibilidad se reevalua mensualmente.
+- GitHub Student: <https://github.com/settings/education/benefits>
+- GitHub Copilot: <https://github.com/settings/copilot>
+
+Opcional para más créditos/modelos:
+
+- NVIDIA Build: crea una cuenta en <https://build.nvidia.com/> y genera un `NVIDIA_API_KEY`.
+
+No subas tokens ni claves al repositorio. Usa variables de entorno locales.
 
 ## 2. Clonar el repositorio
 
 Usa tu fork personal del template.
 
 ```bash
-git clone <URL_DE_TU_FORK>
+git clone <URL_DE_TU_REPO>
 cd <NOMBRE_DEL_REPO>
 git status
 ```
 
 Resultado esperado: `git status` muestra una rama limpia antes de empezar.
 
-## 3. Instalar OpenCode
+## 3. Preparar entorno
 
-Elige una opcion segun tu entorno.
+Linux, macOS y WSL pueden seguir los mismos comandos base. En Windows, instala WSL primero y trabaja dentro de Ubuntu:
+
+```powershell
+wsl --install
+```
+
+Luego abre Ubuntu y continúa con los pasos de Linux.
+
+## 4. Instalar herramientas
+
+Instala solo las que vayas a probar.
+
+OpenCode:
 
 ```bash
 curl -fsSL https://opencode.ai/install | bash
@@ -46,31 +62,74 @@ Verifica:
 opencode --version
 ```
 
-## 4. Conectar Copilot con OpenCode
+GitHub Copilot CLI:
 
-Camino recomendado:
+```bash
+npm install -g @github/copilot
+gh auth login --web
+gh copilot
+```
+
+Codex:
+
+```bash
+npm install -g @openai/codex
+codex
+```
+
+Claude Code:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+claude
+```
+
+## 5. Configuración compartida
+
+Cada agente tiene su propia configuración, pero todos pueden compartir instrucciones de proyecto:
+
+- `AGENTS.md`: instrucciones portables del repo. Codex, OpenCode y Copilot CLI pueden leerlo directo.
+- `CLAUDE.md`: archivo de Claude Code. En este repo solo importa `@AGENTS.md` para no duplicar reglas.
+- `opencode.json` o `.opencode/agents/`: configuración específica de OpenCode, modelos, permisos y agentes.
+- `~/.codex/config.toml`, `~/.claude/` y `~/.copilot/`: configuración personal. No se commitea.
+
+Usa `AGENTS.md` para reglas comunes: comandos, estilo, seguridad y flujo de trabajo. Usa configs específicas solo cuando una herramienta necesite permisos, modelos o proveedores propios.
+
+Regla práctica: si todos los estudiantes necesitan la misma instrucción, va en el repo. Si depende de tu cuenta, tu máquina o tus preferencias, va en `~/...`.
+
+Ejemplos:
+
+- Repo: comandos para levantar la app, checklist de entrega, convenciones de commits, instrucciones para no subir claves.
+- Local: tokens, modelo por defecto, permisos personales, MCPs privados, rutas de tu máquina.
+
+## 6. Conectar proveedores
+
+OpenCode no depende de GitHub Student. Conéctalo con el proveedor que tengas disponible:
 
 ```bash
 opencode
 ```
 
-Dentro de OpenCode:
+Dentro de OpenCode usa:
 
 ```text
 /connect
 ```
 
-Selecciona GitHub Copilot, completa el login de dispositivo y vuelve a la terminal.
+Opciones útiles:
 
-Si tu version de OpenCode usa comandos de autenticacion directa:
+- `NVIDIA`: usa el `NVIDIA_API_KEY` de Build para probar modelos gratuitos.
+- `Anthropic`, `OpenAI` u otro proveedor: usa una clave personal si tienes créditos.
+
+También puedes dejar NVIDIA como variable local:
 
 ```bash
-opencode auth github
+export NVIDIA_API_KEY="nvapi-..."
 ```
 
-## 5. Probar el agente
+## 7. Probar el agente
 
-Desde la raiz del repositorio:
+Desde la raíz del repositorio:
 
 ```bash
 opencode
@@ -79,13 +138,13 @@ opencode
 Prompt de prueba:
 
 ```text
-Lee el README y dime que comandos minimos necesito para levantar este proyecto. No edites archivos.
+Lee el README y dime qué comandos mínimos necesito para levantar este proyecto. No edites archivos.
 ```
 
 Resultado esperado:
 
-- OpenCode responde usando contexto del repositorio.
-- No aparecen errores de autenticacion.
+- La herramienta responde usando contexto del repositorio.
+- No aparecen errores de autenticación.
 - No se crean cambios en Git.
 
 Comprueba:
@@ -94,30 +153,25 @@ Comprueba:
 git status
 ```
 
-## 6. Si Copilot Student no aparece en OpenCode
-
-GitHub documenta Copilot Student como beneficio gratuito para estudiantes verificados, pero el anuncio de soporte oficial de OpenCode menciona explicitamente Copilot Pro, Pro+, Business y Enterprise. Si tu cuenta Student no autentica en OpenCode:
-
-1. Confirma que Copilot funciona en GitHub o en VS Code.
-2. Actualiza OpenCode.
-3. Repite `/connect`.
-4. Si sigue fallando, usa Copilot en el IDE para esta etapa y reporta el caso al equipo docente.
-
-No agregues tokens personales al repositorio. Si usas un proveedor alternativo, guarda claves solo en variables de entorno locales.
-
-## 7. Checklist de entrega
+## 8. Checklist de entrega
 
 - [ ] Fork creado.
 - [ ] Repositorio clonado.
+- [ ] Entorno Linux, macOS o WSL listo.
 - [ ] GitHub Education activo.
-- [ ] Copilot Student activo.
-- [ ] OpenCode instalado.
-- [ ] OpenCode conectado a GitHub Copilot o alternativa acordada.
+- [ ] Copilot CLI, OpenCode, Codex o Claude instalado.
+- [ ] Al menos una herramienta autenticada.
+- [ ] `AGENTS.md` leído por la herramienta elegida.
 - [ ] Prompt de prueba ejecutado sin editar archivos.
 
 ## Fuentes
 
 - GitHub Docs: <https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/enable-copilot/set-up-for-students>
-- GitHub Copilot licenses: <https://docs.github.com/en/billing/concepts/product-billing/github-copilot-licenses>
-- GitHub Changelog OpenCode: <https://github.blog/changelog/2026-01-16-github-copilot-now-supports-opencode/>
-- OpenCode docs: <https://opencode-ai.com/en/docs.html>
+- GitHub Copilot CLI: <https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli>
+- OpenCode providers: <https://opencode.ai/docs/providers>
+- OpenCode agents: <https://opencode.ai/docs/agents/>
+- Codex CLI: <https://www.npmjs.com/package/@openai/codex>
+- Codex AGENTS.md: <https://learn.chatgpt.com/docs/agent-configuration/agents-md.md>
+- Claude Code: <https://docs.anthropic.com/en/docs/claude-code/getting-started>
+- Claude memory: <https://code.claude.com/docs/en/memory>
+- NVIDIA Build: <https://build.nvidia.com/>
