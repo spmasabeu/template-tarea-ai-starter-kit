@@ -27,6 +27,23 @@ Ese comando ejecuta:
 - `bin/rubocop`
 - `bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error`
 
+Qué valida cada parte:
+
+- `bin/rails test`: ejecuta las pruebas automatizadas. Sirve para confirmar que el comportamiento esperado sigue funcionando después de cada cambio.
+- `bin/rubocop`: revisa estilo y errores comunes de Ruby/Rails. Sirve para mantener el código legible y consistente sin discutir formato en cada PR.
+- `bin/brakeman`: analiza posibles problemas de seguridad en Rails, como uso inseguro de parámetros, SQL manual riesgoso o exposición accidental de datos.
+
+Dónde se configuran:
+
+- CI: `config/ci.rb` define los pasos que corre `bin/ci`.
+- GitHub Actions: `.github/workflows/ci.yml` ejecuta `bin/ci` en PRs y pushes a `main`.
+- RuboCop: `.rubocop.yml` hereda reglas de `rubocop-rails-omakase`; `bin/rubocop` fuerza ese archivo con `--config`.
+- Brakeman: por ahora usa la configuración por defecto de la gema y las opciones definidas en `config/ci.rb`.
+
+La separación importante: `config/ci.rb` define qué se valida; `.github/workflows/ci.yml` define cuándo y en qué ambiente se ejecuta en GitHub.
+
+Si un equipo necesita ajustar RuboCop, edita `.rubocop.yml`. Si necesita ignorar un falso positivo real de Brakeman, puede crear `config/brakeman.ignore` con una nota que explique por qué se acepta ese riesgo.
+
 Si necesitas aislar un fallo:
 
 ```bash
@@ -35,6 +52,15 @@ bin/rubocop
 bin/brakeman
 ```
 
+Durante el desarrollo, no esperes al PR para probar. Corre primero el test más cercano al cambio, por ejemplo:
+
+```bash
+bin/rails test test/models/product_test.rb
+bin/rails test test/controllers/level_1_controller_test.rb
+```
+
+Cuando ese test pase, corre `bin/ci` antes de abrir o actualizar el PR. Esto evita subir cambios rotos y hace que GitHub Actions confirme algo que ya validaste localmente.
+
 ## GitHub Actions
 
 El workflow vive en `.github/workflows/ci.yml` y corre en:
@@ -42,7 +68,15 @@ El workflow vive en `.github/workflows/ci.yml` y corre en:
 - cada PR;
 - cada push a `main`.
 
+El workflow prepara el ambiente remoto: Ubuntu, Ruby y PostgreSQL. Luego ejecuta `bin/ci`. No duplica los comandos de CI; reutiliza la misma receta que corres localmente.
+
 La regla práctica: si falla CI, no se mergea. Primero se arregla el fallo en la misma rama del PR.
+
+Para que GitHub bloquee el merge automáticamente, configura una regla sobre `main` con:
+
+- Require a pull request before merging.
+- Require status checks to pass before merging.
+- Status check requerido: `Tests, style and security`.
 
 ## Leer fallos
 
@@ -61,19 +95,37 @@ Analiza este fallo de CI. Dime la causa probable, el archivo a revisar y el camb
 
 ## Render
 
-Configuración esperada:
+Este repo incluye un template de Blueprint en `render.yaml`. La idea es que la configuración de Render quede versionada y pueda revisarse en PR, igual que el código.
+
+Flujo recomendado:
+
+1. CI corre en cada PR.
+2. Si CI está verde, se revisa y mergea a `main`.
+3. Render sincroniza `render.yaml` desde `main`.
+4. Render ejecuta build y despliega la app.
+
+Antes de crear el Blueprint, cada equipo debe editar en `render.yaml`:
+
+- `replace-me-web`: nombre del servicio web.
+- `replace-me-db`: nombre de la base PostgreSQL.
+- `plan`: tipo de instancia según el caso.
+
+Configuración esperada en Render:
 
 - Servicio conectado al repo de GitHub.
 - Rama de deploy: `main`.
 - Auto deploy activado para `main`.
 - Build command: `./bin/render-build.sh`.
-- Pre-deploy command: `./bin/rails db:migrate`.
 - Start command: `./bin/rails server`.
 - Variables de entorno definidas en Render, no en Git.
+- Base PostgreSQL creada desde el mismo `render.yaml`.
+- `DATABASE_URL` conectado desde la base PostgreSQL al servicio web.
 
 Render ejecuta build, luego pre-deploy y finalmente start. Si falla una etapa, el deploy falla y sigue viva la última versión correcta.
 
-Nota: `Pre-deploy Command` requiere un servicio pagado. Si usan plan free, mueve `bundle exec rails db:migrate` al final de `bin/render-build.sh`.
+Render no decide si el cambio está correcto: despliega lo que llega a `main`. Por eso el control de calidad ocurre antes, en el PR con CI verde.
+
+Nota: `Pre-deploy Command` requiere un servicio web pagado. Si usan plan pagado, descomenta `preDeployCommand: ./bin/rails db:migrate` en `render.yaml`. Si usan plan free, ejecuta migraciones manualmente desde Render Shell o mueve temporalmente `bundle exec rails db:migrate` al final de `bin/render-build.sh`.
 
 El script `bin/render-build.sh` instala gems, compila assets y limpia assets antiguos. No guarda secretos ni configura producción.
 
@@ -87,16 +139,16 @@ Mantén secretos fuera del repositorio. En Render configura, según corresponda:
 - `DATABASE_URL`
 - claves de proveedores externos
 
-Resend queda fuera de este manual por ahora. Cuando se use correo transaccional, agrega la API key solo en Render y documenta el flujo en una sección específica.
-
 ## Checklist
 
 - [ ] `bin/ci` pasa localmente.
 - [ ] PR apunta a `main`.
 - [ ] GitHub Actions pasa.
 - [ ] PR aprobado y mergeado.
+- [ ] `render.yaml` tiene nombres propios del equipo.
 - [ ] Render despliega desde `main`.
 - [ ] `bin/render-build.sh` está configurado como build command.
+- [ ] PostgreSQL de Render está conectado por `DATABASE_URL`.
 - [ ] Variables de entorno están en Render, no en Git.
 - [ ] URL de despliegue verificada.
 
@@ -104,3 +156,10 @@ Resend queda fuera de este manual por ahora. Cuando se use correo transaccional,
 
 - Render deploys: <https://render.com/docs/deploys>
 - Render Rails 8: <https://render.com/docs/deploy-rails-8>
+- Render Blueprints: <https://render.com/docs/infrastructure-as-code>
+- Render Blueprint YAML: <https://render.com/docs/blueprint-spec>
+- GitHub rulesets: <https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets>
+- RuboCop configuration: <https://docs.rubocop.org/rubocop/latest/configuration.html>
+- RuboCop Rails: <https://docs.rubocop.org/rubocop-rails/latest/usage.html>
+- Brakeman docs: <https://brakemanscanner.org/docs/>
+- Brakeman options: <https://brakemanscanner.org/docs/options/>

@@ -1,0 +1,28 @@
+# Render Blueprint template.
+# Each team should replace the service/database names before creating the Blueprint.
+
+services:
+  - type: web
+    name: replace-me-web
+    runtime: ruby
+    plan: free
+    branch: main
+    buildCommand: ./bin/render-build.sh
+    # Pre-deploy commands require a paid Render web service.
+    # If the team uses a paid service, uncomment this line so migrations run before deploy:
+    # preDeployCommand: ./bin/rails db:migrate
+    startCommand: ./bin/rails server
+    healthCheckPath: /up
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: replace-me-db
+          property: connectionString
+
+databases:
+  - name: replace-me-db
+    plan: free
