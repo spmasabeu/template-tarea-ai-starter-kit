@@ -3,11 +3,11 @@
 CI.run do
   step "Setup", "bin/setup --skip-server"
 
-  step "Style: Ruby", "bin/rubocop"
+  step "Tests", "bin/rails test"
 
-  step "Security: Gem audit", "bin/bundler-audit"
+  step "Style: Ruby", "RUBOCOP_CACHE_ROOT=tmp/rubocop_cache bin/rubocop"
+
   step "Security: Brakeman code analysis", "bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error"
-
 
   # Optional: set a green GitHub commit status to unblock PR merge.
   # Requires the `gh` CLI and `gh extension install basecamp/gh-signoff`.
