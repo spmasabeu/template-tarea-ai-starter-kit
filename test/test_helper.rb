@@ -49,7 +49,7 @@ module ActiveSupport
     end
 
     def self.feedback_message(score)
-      score = [[score, 0].max, 6.0].min
+      score = [ [ score, 0 ].max, 6.0 ].min
       case score
       when 5.5..6.0 then "¡Excelente! tienes un puntaje sobre 5.5 🚀"
       when 4.0..5.4 then "Buen trabajo, pero revisa algunos casos 🧐. Aún quedan bastantes aspectos por mejorar"
@@ -66,7 +66,7 @@ module ActiveSupport
       test_line = File.readlines(file_path)[line_number - 1]
       points_match = test_line.match(/# (\d+\.\d+) puntos?/)
       points = points_match ? points_match[1].to_f : 0.0
-      
+
       add_score(points)
     rescue => e
       puts "⚠️ Error al calcular puntos para #{name}: #{e.message}"
@@ -74,20 +74,20 @@ module ActiveSupport
 
     def record_failure_if_needed
       return if passed?
-      test_name = self.name.gsub(/test_\d+_/, '').tr('_', ' ').capitalize
+      test_name = self.name.gsub(/test_\d+_/, "").tr("_", " ").capitalize
       @@failed_tests << test_name
     end
 
     Minitest.after_run do
-      require 'iic2143_reporter'
-      
+      require "iic2143_reporter"
+
       report = IIC2143Reporter::Reporter.new(
         @@total_score,
         ActiveSupport::TestCase::MAX_SCORE,
         ActiveSupport::TestCase.class_variable_get(:@@failed_tests),
         ActiveSupport::TestCase.feedback_message(@@total_score)
       )
-      
+
       report_path = Rails.root.join("public", "test_report.html")
       FileUtils.mkdir_p(File.dirname(report_path))
       report.generate(report_path)

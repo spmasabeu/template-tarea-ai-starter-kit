@@ -26,7 +26,7 @@ class Level1Test < ActionDispatch::IntegrationTest
         assert_equal @product2.description, json_response["description"]
         assert_equal @product2.price, json_response["price"]
     end
-     
+
     test "L1 GET /products/:id lanza error 404 para producto no existente" do # 0.05 punto
         get "/products/999"
         assert_response :not_found
@@ -52,7 +52,4 @@ class Level1Test < ActionDispatch::IntegrationTest
         post "/products/#{@brand1.id}", params: { product: product_params }
         assert_response :unprocessable_entity
     end
-
-    
-
 end

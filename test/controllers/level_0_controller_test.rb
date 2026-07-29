@@ -1,7 +1,6 @@
 require "test_helper"
 
 class Level0Test < ActionDispatch::IntegrationTest
-
   setup do
       @brand1 = create(:brand, name: "Colun", country: "Chile")
       @brand2 = create(:brand, name: "Coca Cola", country: "USA")
@@ -92,5 +91,4 @@ class Level0Test < ActionDispatch::IntegrationTest
     post "/buyers", params: { buyer: buyer_params }
     assert_response :unprocessable_entity
   end
-
 end

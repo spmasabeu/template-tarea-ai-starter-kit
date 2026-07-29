@@ -1,7 +1,6 @@
 require "test_helper"
 
 class Level4Test < ActionDispatch::IntegrationTest
-
     setup do
         @brand1 = create(:brand, name: "Colun", country: "Chile")
         @brand2 = create(:brand, name: "Coca Cola", country: "USA")
@@ -13,7 +12,6 @@ class Level4Test < ActionDispatch::IntegrationTest
         @buyer1 = create(:buyer, name: "Buyer_1", wallet: 1000)
         @buyer2 = create(:buyer, name: "Buyer_2", wallet: 2000)
         @buyer3 = create(:buyer, name: "Buyer_3", wallet: 100000000)
-
     end
 
     test "L4 GET /buyers/favorite_country/:buyer_id retorna el país favorito de un comprador" do # 0.4 punto
@@ -45,7 +43,6 @@ class Level4Test < ActionDispatch::IntegrationTest
         assert_nil Product.find_by(id: @product2.id)
         @buyer1.reload
         assert_not_includes @buyer1.products, @product2
-
     end
 
     test "L4 DELETE /products/:id elimina producto existente comprado y devuelve el monto al comprador" do # 0.25 punto
@@ -55,6 +52,4 @@ class Level4Test < ActionDispatch::IntegrationTest
         @buyer1.reload
         assert_equal 1000, @buyer1.wallet
     end
-
-
 end

@@ -1,7 +1,6 @@
 require "test_helper"
 
 class Level2Test < ActionDispatch::IntegrationTest
-
     setup do
         @brand1 = create(:brand, name: "Colun", country: "Chile")
         @brand2 = create(:brand, name: "Coca Cola", country: "USA")
@@ -45,5 +44,4 @@ class Level2Test < ActionDispatch::IntegrationTest
         assert_equal product_params[:description], json_response["description"]
         assert_equal product_params[:price], json_response["price"]
     end
-
 end

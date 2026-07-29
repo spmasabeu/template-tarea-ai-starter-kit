@@ -38,7 +38,7 @@ gem "image_processing", "~> 1.2"
 # gem "image_processing", "~> 1.2"
 
 
-gem 'iic2143_reporter', '~> 0.1.1'
+gem "iic2143_reporter", "~> 0.1.1"
 
 
 
