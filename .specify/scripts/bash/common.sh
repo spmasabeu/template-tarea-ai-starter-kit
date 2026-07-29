@@ -146,7 +146,7 @@ check_feature_branch() {
     fi
     if [[ "$is_sequential" != "true" ]] && [[ ! "$branch" =~ ^[0-9]{8}-[0-9]{6}- ]]; then
         echo "ERROR: Not on a feature branch. Current branch: $raw" >&2
-        echo "Feature branches should be named like: 001-feature-name, 1234-feature-name, or 20260319-143022-feature-name" >&2
+        echo "Feature branches should be named like: 20260319-143022-feature-name" >&2
         return 1
     fi
 

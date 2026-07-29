@@ -88,7 +88,7 @@ Usa `.github/pull_request_template.md`. La copia de referencia vive en `docs/ai-
 
 Un buen PR responde:
 
-- Contexto del problema: qué se intenta resolver y dónde nace la necesidad. Si usaste Spec Kit, enlaza `spec.md` o `plan.md`.
+- Contexto del problema: qué se intenta resolver y dónde nace la necesidad. Si usaste Spec Kit, enlaza `spec.md` o `plan.md` desde `specs/YYYYMMDD-HHMMSS-nombre-feature/`.
 - Implementación: qué se cambió y qué archivos o flujos toca.
 - Validación: comandos, pruebas manuales y criterios cubiertos.
 - Impacto y riesgos: qué podría romperse y qué queda fuera.

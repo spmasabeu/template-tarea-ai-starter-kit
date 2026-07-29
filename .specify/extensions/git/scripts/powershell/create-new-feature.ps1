@@ -11,7 +11,7 @@ param(
     [string]$ShortName,
     [Parameter()]
     [long]$Number = 0,
-    [switch]$Timestamp,
+    [switch]$Timestamp = $true,
     [switch]$Help,
     [Parameter(Position = 0, ValueFromRemainingArguments = $true)]
     [string[]]$FeatureDescription
@@ -19,15 +19,15 @@ param(
 $ErrorActionPreference = 'Stop'
 
 if ($Help) {
-    Write-Host "Usage: ./create-new-feature.ps1 [-Json] [-DryRun] [-AllowExistingBranch] [-ShortName <name>] [-Number N] [-Timestamp] <feature description>"
+    Write-Host "Usage: ./create-new-feature.ps1 [-Json] [-DryRun] [-AllowExistingBranch] [-ShortName <name>] [-Timestamp] <feature description>"
     Write-Host ""
     Write-Host "Options:"
     Write-Host "  -Json               Output in JSON format"
     Write-Host "  -DryRun             Compute branch name without creating the branch"
     Write-Host "  -AllowExistingBranch  Switch to branch if it already exists instead of failing"
     Write-Host "  -ShortName <name>   Provide a custom short name (2-4 words) for the branch"
-    Write-Host "  -Number N           Specify branch number manually (overrides auto-detection)"
-    Write-Host "  -Timestamp          Use timestamp prefix (YYYYMMDD-HHMMSS) instead of sequential numbering"
+    Write-Host "  -Number N           Legacy sequential mode only; ignored when timestamp mode is active"
+    Write-Host "  -Timestamp          Use timestamp prefix (YYYYMMDD-HHMMSS); default for this repo"
     Write-Host "  -Help               Show this help message"
     Write-Host ""
     Write-Host "Environment variables:"
@@ -37,7 +37,7 @@ if ($Help) {
 }
 
 if (-not $FeatureDescription -or $FeatureDescription.Count -eq 0) {
-    Write-Error "Usage: ./create-new-feature.ps1 [-Json] [-DryRun] [-AllowExistingBranch] [-ShortName <name>] [-Number N] [-Timestamp] <feature description>"
+    Write-Error "Usage: ./create-new-feature.ps1 [-Json] [-DryRun] [-AllowExistingBranch] [-ShortName <name>] [-Timestamp] <feature description>"
     exit 1
 }
 

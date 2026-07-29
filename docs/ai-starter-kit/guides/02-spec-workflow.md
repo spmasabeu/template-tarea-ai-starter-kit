@@ -19,7 +19,7 @@ Puedes usar el template de prompt como input inicial para `$speckit-specify`.
 
 Flujo recomendado:
 
-1. `$speckit-specify`: crea `spec.md`.
+1. `$speckit-specify`: crea `spec.md` en una carpeta con timestamp.
 2. Revisar y ajustar el spec.
 3. `$speckit-plan`: crea `plan.md` con tareas embebidas.
 4. `$speckit-implement`: implementa solo lo planificado.
@@ -28,10 +28,12 @@ Flujo recomendado:
 Resultado esperado por feature:
 
 ```text
-specs/001-nombre-feature/
+specs/YYYYMMDD-HHMMSS-nombre-feature/
 ├── spec.md
 └── plan.md
 ```
+
+El prefijo timestamp evita que dos personas creen specs con el mismo correlativo cuando trabajan en paralelo. Usa la hora local de creación y un nombre corto en kebab-case, por ejemplo `specs/20260729-153000-filtro-productos/`.
 
 `tasks.md`, `research.md`, `data-model.md`, `quickstart.md` y `contracts/` quedan como modo avanzado.
 

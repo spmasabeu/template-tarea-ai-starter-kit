@@ -1,6 +1,6 @@
 # Plan: [FEATURE]
 
-**Feature**: `[###-feature-name]`
+**Feature**: `[YYYYMMDD-HHMMSS-feature-name]`
 **Spec**: [link a `spec.md`]
 **Estado**: Draft
 

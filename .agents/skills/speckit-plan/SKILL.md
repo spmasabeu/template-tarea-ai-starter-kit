@@ -47,6 +47,6 @@ Create one `plan.md` with the technical approach, files, tasks, validation, risk
 
 ## Done When
 
-- `specs/NNN-short-name/plan.md` exists.
+- `specs/YYYYMMDD-HHMMSS-short-name/plan.md` exists.
 - The plan has a task checklist and validation section.
 - Report the plan path and recommended next action.

@@ -12,7 +12,7 @@ Antes de proponer implementación, el agente debe leer el spec, el plan, `AGENTS
 
 ### III. Trazabilidad mínima
 
-Para tareas no triviales, mantener `spec.md` y `plan.md` en `specs/NNN-nombre/`. Las tareas van embebidas en `plan.md`.
+Para tareas no triviales, mantener `spec.md` y `plan.md` en `specs/YYYYMMDD-HHMMSS-nombre/`. Las tareas van embebidas en `plan.md`.
 
 ### IV. Validación explícita
 

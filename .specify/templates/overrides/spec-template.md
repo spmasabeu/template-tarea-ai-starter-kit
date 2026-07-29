@@ -1,6 +1,6 @@
 # Spec: [FEATURE NAME]
 
-**Feature**: `[###-feature-name]`
+**Feature**: `[YYYYMMDD-HHMMSS-feature-name]`
 **Estado**: Draft
 **Input**: "$ARGUMENTS"
 

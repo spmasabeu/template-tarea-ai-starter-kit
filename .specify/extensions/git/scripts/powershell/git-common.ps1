@@ -44,7 +44,7 @@ function Test-FeatureBranch {
     $isSequential = ($Branch -match '^[0-9]{3,}-') -and (-not $hasMalformedTimestamp)
     if (-not $isSequential -and $Branch -notmatch '^\d{8}-\d{6}-') {
         [Console]::Error.WriteLine("ERROR: Not on a feature branch. Current branch: $raw")
-        [Console]::Error.WriteLine("Feature branches should be named like: 001-feature-name, 1234-feature-name, or 20260319-143022-feature-name")
+        [Console]::Error.WriteLine("Feature branches should be named like: 20260319-143022-feature-name")
         return $false
     }
     return $true

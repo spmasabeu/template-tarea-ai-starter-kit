@@ -22,10 +22,11 @@ Get the current branch name:
 git rev-parse --abbrev-ref HEAD
 ```
 
-The branch name must match one of these patterns:
+The branch name should use timestamp mode for new course work:
 
-1. **Sequential**: `^[0-9]{3,}-` (e.g., `001-feature-name`, `042-fix-bug`, `1000-big-feature`)
-2. **Timestamp**: `^[0-9]{8}-[0-9]{6}-` (e.g., `20260319-143022-feature-name`)
+- **Timestamp**: `^[0-9]{8}-[0-9]{6}-` (e.g., `20260319-143022-feature-name`)
+
+Legacy sequential branches (`001-feature-name`) may still validate, but do not create new specs that way.
 
 ## Execution
 
@@ -39,7 +40,7 @@ If on a feature branch (matches either pattern):
 
 If NOT on a feature branch:
 - Output: `✗ Not on a feature branch. Current branch: <branch-name>`
-- Output: `Feature branches should be named like: 001-feature-name or 20260319-143022-feature-name`
+- Output: `Feature branches should be named like: 20260319-143022-feature-name`
 
 ## Graceful Degradation
 

@@ -7,7 +7,7 @@ DRY_RUN=false
 ALLOW_EXISTING=false
 SHORT_NAME=""
 BRANCH_NUMBER=""
-USE_TIMESTAMP=false
+USE_TIMESTAMP=true
 ARGS=()
 i=1
 while [ $i -le $# ]; do
@@ -53,15 +53,15 @@ while [ $i -le $# ]; do
             USE_TIMESTAMP=true
             ;;
         --help|-h)
-            echo "Usage: $0 [--json] [--dry-run] [--allow-existing-branch] [--short-name <name>] [--number N] [--timestamp] <feature_description>"
+            echo "Usage: $0 [--json] [--dry-run] [--allow-existing-branch] [--short-name <name>] [--timestamp] <feature_description>"
             echo ""
             echo "Options:"
             echo "  --json              Output in JSON format"
             echo "  --dry-run           Compute branch name and paths without creating branches, directories, or files"
             echo "  --allow-existing-branch  Switch to branch if it already exists instead of failing"
             echo "  --short-name <name> Provide a custom short name (2-4 words) for the branch"
-            echo "  --number N          Specify branch number manually (overrides auto-detection)"
-            echo "  --timestamp         Use timestamp prefix (YYYYMMDD-HHMMSS) instead of sequential numbering"
+            echo "  --number N          Legacy sequential mode only; ignored when timestamp mode is active"
+            echo "  --timestamp         Use timestamp prefix (YYYYMMDD-HHMMSS); default for this repo"
             echo "  --help, -h          Show this help message"
             echo ""
             echo "Examples:"
@@ -79,7 +79,7 @@ done
 
 FEATURE_DESCRIPTION="${ARGS[*]}"
 if [ -z "$FEATURE_DESCRIPTION" ]; then
-    echo "Usage: $0 [--json] [--dry-run] [--allow-existing-branch] [--short-name <name>] [--number N] [--timestamp] <feature_description>" >&2
+    echo "Usage: $0 [--json] [--dry-run] [--allow-existing-branch] [--short-name <name>] [--timestamp] <feature_description>" >&2
     exit 1
 fi
 

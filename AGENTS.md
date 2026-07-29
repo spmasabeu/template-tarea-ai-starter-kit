@@ -21,6 +21,6 @@
 - Evitar cambios no relacionados con la tarea.
 
 <!-- SPECKIT START -->
-Para tareas con Spec Kit, lee primero el `spec.md` y `plan.md` activos en `specs/`.
+Para tareas con Spec Kit, lee primero el `spec.md` y `plan.md` activos en `specs/YYYYMMDD-HHMMSS-nombre-feature/`.
 El flujo del curso usa solo esos dos archivos por feature, más implementación y review del diff.
 <!-- SPECKIT END -->
