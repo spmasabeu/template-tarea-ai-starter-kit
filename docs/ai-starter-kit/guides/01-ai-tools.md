@@ -47,6 +47,8 @@ Usa esta estructura para un cambio one-shot o como input inicial para crear un s
 
 Una skill es una receta reutilizable para una familia de tareas. Agrégala solo si el equipo la usará varias veces.
 
+Template base: `docs/ai-starter-kit/templates/skill-template.md`.
+
 Ejemplos razonables:
 
 - Revisar un PR.
@@ -63,6 +65,19 @@ Dónde pueden vivir:
 
 - Proyecto: `.agents/skills/<nombre>/SKILL.md`, `.claude/skills/<nombre>/SKILL.md` o `.opencode/skills/<nombre>/SKILL.md`.
 - Personal: `~/.agents/skills/`, `~/.claude/skills/`, `~/.config/opencode/skills/` o `~/.codex/skills/`.
+
+Estructura mínima de una buena skill:
+
+- `name`: nombre corto en kebab-case.
+- `description`: qué hace y cuándo usarla. Es el dato más importante para que el agente decida si debe cargarla.
+- Objetivo: tarea repetible que resuelve.
+- Contexto que debe leer: archivos, carpetas o referencias necesarias.
+- Flujo de trabajo: pasos concretos.
+- Preguntas necesarias: cuándo debe pedir aclaración antes de avanzar.
+- Gates: condiciones antes de editar y antes de cerrar.
+- Recursos opcionales: `scripts/`, `references/` o `assets/` solo si aportan valor real.
+
+Regla práctica: primero escribe una skill solo con `SKILL.md`. Agrega `references/` si el contexto es largo, `scripts/` si el paso debe ser determinístico, y `assets/` si necesitas plantillas o archivos base.
 
 Repos útiles para explorar:
 
@@ -163,10 +178,12 @@ Trabaja con cambios pequeños. Antes de modificar archivos, dime qué leíste y 
 ## Fuentes
 
 - Codex AGENTS.md: <https://learn.chatgpt.com/docs/agent-configuration/agents-md.md>
+- OpenAI skills catalog: <https://github.com/openai/skills>
 - OpenCode skills: <https://opencode.ai/docs/skills/>
 - OpenCode agents: <https://opencode.ai/docs/agents/>
 - OpenCode MCP: <https://opencode.ai/v2/docs/mcp-servers>
 - GitHub agent skills: <https://docs.github.com/en/copilot/concepts/agents/about-agent-skills>
+- Claude custom skills: <https://support.claude.com/en/articles/12512198-how-to-create-custom-skills>
 - Claude Code skills: <https://code.claude.com/docs/en/slash-commands>
 - Claude models: <https://code.claude.com/docs/en/model-config>
 - OpenAI model guidance: <https://developers.openai.com/api/docs/guides/latest-model>
