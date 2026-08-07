@@ -2,6 +2,15 @@
 
 Objetivo: correr checks automáticos en cada PR y desplegar en Render solo desde `main`.
 
+Esta guía es complementaria. Si tu sección del curso no usará deploy, puedes concentrarte en CI: checks locales, GitHub Actions, lectura de fallos y protección de `main`. La parte de Render muestra cómo se conecta el flujo con un despliegue real, pero no es necesaria para todas las entregas.
+
+La separación importante:
+
+- CI responde: "¿este cambio pasa los checks definidos por el equipo?".
+- CD/deploy responde: "¿la versión aprobada llegó al ambiente publicado?".
+
+Render no valida si el cambio es correcto. Solo despliega lo que llega a `main`. Por eso la calidad se controla antes, en el PR.
+
 ## Flujo esperado
 
 1. Trabaja en una rama `feature/`, `fix/`, `docs/` o `chore/`.
@@ -43,6 +52,8 @@ Dónde se configuran:
 La separación importante: `config/ci.rb` define qué se valida; `.github/workflows/ci.yml` define cuándo y en qué ambiente se ejecuta en GitHub.
 
 Si un equipo necesita ajustar RuboCop, edita `.rubocop.yml`. Si necesita ignorar un falso positivo real de Brakeman, puede crear `config/brakeman.ignore` con una nota que explique por qué se acepta ese riesgo.
+
+No arregles CI apagando checks sin entender el fallo. Si un check molesta porque encontró un problema real, corrige el problema. Si es un falso positivo, deja una explicación revisable.
 
 Si necesitas aislar un fallo:
 
@@ -93,6 +104,19 @@ Prompt útil:
 Analiza este fallo de CI. Dime la causa probable, el archivo a revisar y el cambio mínimo. No edites todavía.
 ```
 
+No pegues todo el log si tiene cientos de líneas. Primero identifica el comando fallido y el primer error real. El resto del log suele ser consecuencia.
+
+## Fallos comunes
+
+| Síntoma | Causa probable | Primer paso |
+| --- | --- | --- |
+| `bin/rails test` falla local y en CI | Bug real o test desactualizado. | Corre el test más cercano y revisa el primer failure. |
+| Pasa local pero falla en CI | Diferencia de ambiente, dependencia, orden de tests o base de datos. | Lee versión de Ruby/PostgreSQL y comando exacto en Actions. |
+| RuboCop falla | Estilo o regla de Rails incumplida. | Corre `bin/rubocop` local y corrige el archivo indicado. |
+| Brakeman falla | Posible riesgo de seguridad o falso positivo. | Lee la advertencia completa y revisa si hay input de usuario involucrado. |
+| Render build falla | Dependencia, assets, comando de build o variable faltante. | Revisa etapa exacta: build, pre-deploy o start. |
+| App deploya pero no arranca | Falta variable, migración o comando start incorrecto. | Revisa logs de runtime y variables requeridas. |
+
 ## Render
 
 Este repo incluye un template de Blueprint en `render.yaml`. La idea es que la configuración de Render quede versionada y pueda revisarse en PR, igual que el código.
@@ -131,6 +155,8 @@ El script `bin/render-build.sh` instala gems, compila assets y limpia assets ant
 
 Si el proyecto usa Docker, Render debe construir con el `Dockerfile` del repo y el build/start se definen desde la configuración del servicio.
 
+Si el curso no evalúa deploy, no gastes tiempo ajustando Render antes de tener CI verde y PR revisable. Deploy sin checks solo publica incertidumbre.
+
 ## Variables de entorno
 
 Mantén secretos fuera del repositorio. En Render configura, según corresponda:
@@ -139,12 +165,15 @@ Mantén secretos fuera del repositorio. En Render configura, según corresponda:
 - `DATABASE_URL`
 - claves de proveedores externos
 
+Nunca copies valores reales de variables a `render.yaml`, README, PRs o screenshots. En el repo puede quedar el nombre de la variable; el valor vive en Render o en tu entorno local.
+
 ## Checklist
 
 - [ ] `bin/ci` pasa localmente.
 - [ ] PR apunta a `main`.
 - [ ] GitHub Actions pasa.
 - [ ] PR aprobado y mergeado.
+- [ ] Si Render queda fuera del scope del curso, esa decisión está clara para el equipo.
 - [ ] `render.yaml` tiene nombres propios del equipo.
 - [ ] Render despliega desde `main`.
 - [ ] `bin/render-build.sh` está configurado como build command.
